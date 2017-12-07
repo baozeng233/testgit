@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicEmployeeMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+    <id column="employee_id" property="employeeId" jdbcType="BIGINT" />
+    <result column="employee_code" property="employeeCode" jdbcType="VARCHAR" />
+    <result column="employee_no" property="employeeNo" jdbcType="VARCHAR" />
+    <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
+    <result column="employee_pinyin" property="employeePinyin" jdbcType="VARCHAR" />
+    <result column="employee_order" property="employeeOrder" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="BIGINT" />
+    <result column="dept_job_id" property="deptJobId" jdbcType="BIGINT" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="phone_sms" property="phoneSms" jdbcType="VARCHAR" />
+    <result column="e_mail" property="eMail" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="self_remark" property="selfRemark" jdbcType="VARCHAR" />
+    <result column="is_use" property="isUse" jdbcType="INTEGER" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="basic_salar" property="basicSalar" jdbcType="DECIMAL" />
+    <result column="add_salar" property="addSalar" jdbcType="DECIMAL" />
+    <result column="limit_sum_amount" property="limitSumAmount" jdbcType="DECIMAL" />
+    <result column="limit_one_amount" property="limitOneAmount" jdbcType="DECIMAL" />
+    <result column="transport_tool_id" property="transportToolId" jdbcType="INTEGER" />
+    <result column="part_id" property="partId" jdbcType="BIGINT" />
+    <result column="job_remark" property="jobRemark" jdbcType="VARCHAR" />
+    <result column="driver_license_type" property="driverLicenseType" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="INTEGER" />
+    <result column="bank_account_id" property="bankAccountId" jdbcType="INTEGER" />
+    <result column="bank_account_name" property="bankAccountName" jdbcType="VARCHAR" />
+    <result column="bank_account_no" property="bankAccountNo" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    employee_id, employee_code, employee_no, employee_name, employee_pinyin, employee_order, 
+    site_id, dept_job_id, id_card, sex, phone, phone_sms, e_mail, birthday, address, 
+    self_remark, is_use, start_date, end_date, basic_salar, add_salar, limit_sum_amount, 
+    limit_one_amount, transport_tool_id, part_id, job_remark, driver_license_type, bank_id, 
+    bank_account_id, bank_account_name, bank_account_no, rd_status, created_by, created_time, 
+    modified_by, modified_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployeeCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_employee
+    where employee_id = #{employeeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_employee
+    where employee_id = #{employeeId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployeeCriteria" >
+    delete from hs_basic_employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+    insert into hs_basic_employee (employee_id, employee_code, employee_no, 
+      employee_name, employee_pinyin, employee_order, 
+      site_id, dept_job_id, id_card, 
+      sex, phone, phone_sms, 
+      e_mail, birthday, address, 
+      self_remark, is_use, start_date, 
+      end_date, basic_salar, add_salar, 
+      limit_sum_amount, limit_one_amount, transport_tool_id, 
+      part_id, job_remark, driver_license_type, 
+      bank_id, bank_account_id, bank_account_name, 
+      bank_account_no, rd_status, created_by, 
+      created_time, modified_by, modified_time
+      )
+    values (#{employeeId,jdbcType=BIGINT}, #{employeeCode,jdbcType=VARCHAR}, #{employeeNo,jdbcType=VARCHAR}, 
+      #{employeeName,jdbcType=VARCHAR}, #{employeePinyin,jdbcType=VARCHAR}, #{employeeOrder,jdbcType=INTEGER}, 
+      #{siteId,jdbcType=BIGINT}, #{deptJobId,jdbcType=BIGINT}, #{idCard,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{phoneSms,jdbcType=VARCHAR}, 
+      #{eMail,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, #{address,jdbcType=VARCHAR}, 
+      #{selfRemark,jdbcType=VARCHAR}, #{isUse,jdbcType=INTEGER}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{basicSalar,jdbcType=DECIMAL}, #{addSalar,jdbcType=DECIMAL}, 
+      #{limitSumAmount,jdbcType=DECIMAL}, #{limitOneAmount,jdbcType=DECIMAL}, #{transportToolId,jdbcType=INTEGER}, 
+      #{partId,jdbcType=BIGINT}, #{jobRemark,jdbcType=VARCHAR}, #{driverLicenseType,jdbcType=VARCHAR}, 
+      #{bankId,jdbcType=INTEGER}, #{bankAccountId,jdbcType=INTEGER}, #{bankAccountName,jdbcType=VARCHAR}, 
+      #{bankAccountNo,jdbcType=VARCHAR}, #{rdStatus,jdbcType=INTEGER}, #{createdBy,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=BIGINT}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+    insert into hs_basic_employee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="employeeId != null" >
+        employee_id,
+      </if>
+      <if test="employeeCode != null" >
+        employee_code,
+      </if>
+      <if test="employeeNo != null" >
+        employee_no,
+      </if>
+      <if test="employeeName != null" >
+        employee_name,
+      </if>
+      <if test="employeePinyin != null" >
+        employee_pinyin,
+      </if>
+      <if test="employeeOrder != null" >
+        employee_order,
+      </if>
+      <if test="siteId != null" >
+        site_id,
+      </if>
+      <if test="deptJobId != null" >
+        dept_job_id,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="phoneSms != null" >
+        phone_sms,
+      </if>
+      <if test="eMail != null" >
+        e_mail,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="selfRemark != null" >
+        self_remark,
+      </if>
+      <if test="isUse != null" >
+        is_use,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="basicSalar != null" >
+        basic_salar,
+      </if>
+      <if test="addSalar != null" >
+        add_salar,
+      </if>
+      <if test="limitSumAmount != null" >
+        limit_sum_amount,
+      </if>
+      <if test="limitOneAmount != null" >
+        limit_one_amount,
+      </if>
+      <if test="transportToolId != null" >
+        transport_tool_id,
+      </if>
+      <if test="partId != null" >
+        part_id,
+      </if>
+      <if test="jobRemark != null" >
+        job_remark,
+      </if>
+      <if test="driverLicenseType != null" >
+        driver_license_type,
+      </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
+      <if test="bankAccountId != null" >
+        bank_account_id,
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name,
+      </if>
+      <if test="bankAccountNo != null" >
+        bank_account_no,
+      </if>
+      <if test="rdStatus != null" >
+        rd_status,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="employeeCode != null" >
+        #{employeeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNo != null" >
+        #{employeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeName != null" >
+        #{employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeePinyin != null" >
+        #{employeePinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeOrder != null" >
+        #{employeeOrder,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="deptJobId != null" >
+        #{deptJobId,jdbcType=BIGINT},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneSms != null" >
+        #{phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="eMail != null" >
+        #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="selfRemark != null" >
+        #{selfRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="basicSalar != null" >
+        #{basicSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="addSalar != null" >
+        #{addSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="limitSumAmount != null" >
+        #{limitSumAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="limitOneAmount != null" >
+        #{limitOneAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="transportToolId != null" >
+        #{transportToolId,jdbcType=INTEGER},
+      </if>
+      <if test="partId != null" >
+        #{partId,jdbcType=BIGINT},
+      </if>
+      <if test="jobRemark != null" >
+        #{jobRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseType != null" >
+        #{driverLicenseType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="bankAccountId != null" >
+        #{bankAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="bankAccountName != null" >
+        #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNo != null" >
+        #{bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployeeCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_employee
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_employee
+    <set >
+      <if test="record.employeeId != null" >
+        employee_id = #{record.employeeId,jdbcType=BIGINT},
+      </if>
+      <if test="record.employeeCode != null" >
+        employee_code = #{record.employeeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeNo != null" >
+        employee_no = #{record.employeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeName != null" >
+        employee_name = #{record.employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeePinyin != null" >
+        employee_pinyin = #{record.employeePinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.employeeOrder != null" >
+        employee_order = #{record.employeeOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.siteId != null" >
+        site_id = #{record.siteId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deptJobId != null" >
+        dept_job_id = #{record.deptJobId,jdbcType=BIGINT},
+      </if>
+      <if test="record.idCard != null" >
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneSms != null" >
+        phone_sms = #{record.phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eMail != null" >
+        e_mail = #{record.eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null" >
+        birthday = #{record.birthday,jdbcType=DATE},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.selfRemark != null" >
+        self_remark = #{record.selfRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isUse != null" >
+        is_use = #{record.isUse,jdbcType=INTEGER},
+      </if>
+      <if test="record.startDate != null" >
+        start_date = #{record.startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endDate != null" >
+        end_date = #{record.endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.basicSalar != null" >
+        basic_salar = #{record.basicSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="record.addSalar != null" >
+        add_salar = #{record.addSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="record.limitSumAmount != null" >
+        limit_sum_amount = #{record.limitSumAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.limitOneAmount != null" >
+        limit_one_amount = #{record.limitOneAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.transportToolId != null" >
+        transport_tool_id = #{record.transportToolId,jdbcType=INTEGER},
+      </if>
+      <if test="record.partId != null" >
+        part_id = #{record.partId,jdbcType=BIGINT},
+      </if>
+      <if test="record.jobRemark != null" >
+        job_remark = #{record.jobRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.driverLicenseType != null" >
+        driver_license_type = #{record.driverLicenseType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankId != null" >
+        bank_id = #{record.bankId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bankAccountId != null" >
+        bank_account_id = #{record.bankAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="record.bankAccountName != null" >
+        bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccountNo != null" >
+        bank_account_no = #{record.bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rdStatus != null" >
+        rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null" >
+        modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedTime != null" >
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_employee
+    set employee_id = #{record.employeeId,jdbcType=BIGINT},
+      employee_code = #{record.employeeCode,jdbcType=VARCHAR},
+      employee_no = #{record.employeeNo,jdbcType=VARCHAR},
+      employee_name = #{record.employeeName,jdbcType=VARCHAR},
+      employee_pinyin = #{record.employeePinyin,jdbcType=VARCHAR},
+      employee_order = #{record.employeeOrder,jdbcType=INTEGER},
+      site_id = #{record.siteId,jdbcType=BIGINT},
+      dept_job_id = #{record.deptJobId,jdbcType=BIGINT},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      phone_sms = #{record.phoneSms,jdbcType=VARCHAR},
+      e_mail = #{record.eMail,jdbcType=VARCHAR},
+      birthday = #{record.birthday,jdbcType=DATE},
+      address = #{record.address,jdbcType=VARCHAR},
+      self_remark = #{record.selfRemark,jdbcType=VARCHAR},
+      is_use = #{record.isUse,jdbcType=INTEGER},
+      start_date = #{record.startDate,jdbcType=TIMESTAMP},
+      end_date = #{record.endDate,jdbcType=TIMESTAMP},
+      basic_salar = #{record.basicSalar,jdbcType=DECIMAL},
+      add_salar = #{record.addSalar,jdbcType=DECIMAL},
+      limit_sum_amount = #{record.limitSumAmount,jdbcType=DECIMAL},
+      limit_one_amount = #{record.limitOneAmount,jdbcType=DECIMAL},
+      transport_tool_id = #{record.transportToolId,jdbcType=INTEGER},
+      part_id = #{record.partId,jdbcType=BIGINT},
+      job_remark = #{record.jobRemark,jdbcType=VARCHAR},
+      driver_license_type = #{record.driverLicenseType,jdbcType=VARCHAR},
+      bank_id = #{record.bankId,jdbcType=INTEGER},
+      bank_account_id = #{record.bankAccountId,jdbcType=INTEGER},
+      bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+      bank_account_no = #{record.bankAccountNo,jdbcType=VARCHAR},
+      rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=BIGINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+    update hs_basic_employee
+    <set >
+      <if test="employeeCode != null" >
+        employee_code = #{employeeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeNo != null" >
+        employee_no = #{employeeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeName != null" >
+        employee_name = #{employeeName,jdbcType=VARCHAR},
+      </if>
+      <if test="employeePinyin != null" >
+        employee_pinyin = #{employeePinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeOrder != null" >
+        employee_order = #{employeeOrder,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        site_id = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="deptJobId != null" >
+        dept_job_id = #{deptJobId,jdbcType=BIGINT},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneSms != null" >
+        phone_sms = #{phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="eMail != null" >
+        e_mail = #{eMail,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="selfRemark != null" >
+        self_remark = #{selfRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        is_use = #{isUse,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="basicSalar != null" >
+        basic_salar = #{basicSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="addSalar != null" >
+        add_salar = #{addSalar,jdbcType=DECIMAL},
+      </if>
+      <if test="limitSumAmount != null" >
+        limit_sum_amount = #{limitSumAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="limitOneAmount != null" >
+        limit_one_amount = #{limitOneAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="transportToolId != null" >
+        transport_tool_id = #{transportToolId,jdbcType=INTEGER},
+      </if>
+      <if test="partId != null" >
+        part_id = #{partId,jdbcType=BIGINT},
+      </if>
+      <if test="jobRemark != null" >
+        job_remark = #{jobRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="driverLicenseType != null" >
+        driver_license_type = #{driverLicenseType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=INTEGER},
+      </if>
+      <if test="bankAccountId != null" >
+        bank_account_id = #{bankAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNo != null" >
+        bank_account_no = #{bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        rd_status = #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by = #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where employee_id = #{employeeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+    update hs_basic_employee
+    set employee_code = #{employeeCode,jdbcType=VARCHAR},
+      employee_no = #{employeeNo,jdbcType=VARCHAR},
+      employee_name = #{employeeName,jdbcType=VARCHAR},
+      employee_pinyin = #{employeePinyin,jdbcType=VARCHAR},
+      employee_order = #{employeeOrder,jdbcType=INTEGER},
+      site_id = #{siteId,jdbcType=BIGINT},
+      dept_job_id = #{deptJobId,jdbcType=BIGINT},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      phone_sms = #{phoneSms,jdbcType=VARCHAR},
+      e_mail = #{eMail,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      address = #{address,jdbcType=VARCHAR},
+      self_remark = #{selfRemark,jdbcType=VARCHAR},
+      is_use = #{isUse,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      basic_salar = #{basicSalar,jdbcType=DECIMAL},
+      add_salar = #{addSalar,jdbcType=DECIMAL},
+      limit_sum_amount = #{limitSumAmount,jdbcType=DECIMAL},
+      limit_one_amount = #{limitOneAmount,jdbcType=DECIMAL},
+      transport_tool_id = #{transportToolId,jdbcType=INTEGER},
+      part_id = #{partId,jdbcType=BIGINT},
+      job_remark = #{jobRemark,jdbcType=VARCHAR},
+      driver_license_type = #{driverLicenseType,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=INTEGER},
+      bank_account_id = #{bankAccountId,jdbcType=INTEGER},
+      bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      bank_account_no = #{bankAccountNo,jdbcType=VARCHAR},
+      rd_status = #{rdStatus,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=BIGINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where employee_id = #{employeeId,jdbcType=BIGINT}
+  </update>
+</mapper>

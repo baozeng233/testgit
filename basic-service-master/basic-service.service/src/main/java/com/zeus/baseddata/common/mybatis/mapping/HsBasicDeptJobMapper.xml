@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicDeptJobMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJob" >
+    <id column="dept_job_id" property="deptJobId" jdbcType="BIGINT" />
+    <result column="dept_id" property="deptId" jdbcType="BIGINT" />
+    <result column="job_id" property="jobId" jdbcType="BIGINT" />
+    <result column="dept_job_name" property="deptJobName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    dept_job_id, dept_id, job_id, dept_job_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJobCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_dept_job
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_dept_job
+    where dept_job_id = #{deptJobId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_dept_job
+    where dept_job_id = #{deptJobId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJobCriteria" >
+    delete from hs_basic_dept_job
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJob" >
+    insert into hs_basic_dept_job (dept_job_id, dept_id, job_id, 
+      dept_job_name)
+    values (#{deptJobId,jdbcType=BIGINT}, #{deptId,jdbcType=BIGINT}, #{jobId,jdbcType=BIGINT}, 
+      #{deptJobName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJob" >
+    insert into hs_basic_dept_job
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deptJobId != null" >
+        dept_job_id,
+      </if>
+      <if test="deptId != null" >
+        dept_id,
+      </if>
+      <if test="jobId != null" >
+        job_id,
+      </if>
+      <if test="deptJobName != null" >
+        dept_job_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deptJobId != null" >
+        #{deptJobId,jdbcType=BIGINT},
+      </if>
+      <if test="deptId != null" >
+        #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="jobId != null" >
+        #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="deptJobName != null" >
+        #{deptJobName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJobCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_dept_job
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_dept_job
+    <set >
+      <if test="record.deptJobId != null" >
+        dept_job_id = #{record.deptJobId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deptId != null" >
+        dept_id = #{record.deptId,jdbcType=BIGINT},
+      </if>
+      <if test="record.jobId != null" >
+        job_id = #{record.jobId,jdbcType=BIGINT},
+      </if>
+      <if test="record.deptJobName != null" >
+        dept_job_name = #{record.deptJobName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_dept_job
+    set dept_job_id = #{record.deptJobId,jdbcType=BIGINT},
+      dept_id = #{record.deptId,jdbcType=BIGINT},
+      job_id = #{record.jobId,jdbcType=BIGINT},
+      dept_job_name = #{record.deptJobName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJob" >
+    update hs_basic_dept_job
+    <set >
+      <if test="deptId != null" >
+        dept_id = #{deptId,jdbcType=BIGINT},
+      </if>
+      <if test="jobId != null" >
+        job_id = #{jobId,jdbcType=BIGINT},
+      </if>
+      <if test="deptJobName != null" >
+        dept_job_name = #{deptJobName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dept_job_id = #{deptJobId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.person.HsBasicDeptJob" >
+    update hs_basic_dept_job
+    set dept_id = #{deptId,jdbcType=BIGINT},
+      job_id = #{jobId,jdbcType=BIGINT},
+      dept_job_name = #{deptJobName,jdbcType=VARCHAR}
+    where dept_job_id = #{deptJobId,jdbcType=BIGINT}
+  </update>
+</mapper>

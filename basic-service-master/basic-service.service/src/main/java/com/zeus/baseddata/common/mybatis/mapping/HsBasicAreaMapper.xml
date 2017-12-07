@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.based.HsBasicArea" >
+    <id column="area_id" property="areaId" jdbcType="BIGINT" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="area_pinyin" property="areaPinyin" jdbcType="VARCHAR" />
+    <result column="area_order" property="areaOrder" jdbcType="INTEGER" />
+    <result column="parent_area_id" property="parentAreaId" jdbcType="BIGINT" />
+    <result column="area_level" property="areaLevel" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    area_id, area_code, area_name, area_pinyin, area_order, parent_area_id, area_level, 
+    remark, rd_status, created_by, created_time, modified_by, modified_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicAreaCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_area
+    where area_id = #{areaId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_area
+    where area_id = #{areaId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicAreaCriteria" >
+    delete from hs_basic_area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicArea" >
+    insert into hs_basic_area (area_id, area_code, area_name, 
+      area_pinyin, area_order, parent_area_id, 
+      area_level, remark, rd_status, 
+      created_by, created_time, modified_by, 
+      modified_time)
+    values (#{areaId,jdbcType=BIGINT}, #{areaCode,jdbcType=VARCHAR}, #{areaName,jdbcType=VARCHAR}, 
+      #{areaPinyin,jdbcType=VARCHAR}, #{areaOrder,jdbcType=INTEGER}, #{parentAreaId,jdbcType=BIGINT}, 
+      #{areaLevel,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{rdStatus,jdbcType=INTEGER}, 
+      #{createdBy,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=BIGINT}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicArea" >
+    insert into hs_basic_area
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        area_id,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="areaName != null" >
+        area_name,
+      </if>
+      <if test="areaPinyin != null" >
+        area_pinyin,
+      </if>
+      <if test="areaOrder != null" >
+        area_order,
+      </if>
+      <if test="parentAreaId != null" >
+        parent_area_id,
+      </if>
+      <if test="areaLevel != null" >
+        area_level,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="rdStatus != null" >
+        rd_status,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="areaId != null" >
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaPinyin != null" >
+        #{areaPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="areaOrder != null" >
+        #{areaOrder,jdbcType=INTEGER},
+      </if>
+      <if test="parentAreaId != null" >
+        #{parentAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="areaLevel != null" >
+        #{areaLevel,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicAreaCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_area
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_area
+    <set >
+      <if test="record.areaId != null" >
+        area_id = #{record.areaId,jdbcType=BIGINT},
+      </if>
+      <if test="record.areaCode != null" >
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaName != null" >
+        area_name = #{record.areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaPinyin != null" >
+        area_pinyin = #{record.areaPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaOrder != null" >
+        area_order = #{record.areaOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.parentAreaId != null" >
+        parent_area_id = #{record.parentAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="record.areaLevel != null" >
+        area_level = #{record.areaLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rdStatus != null" >
+        rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null" >
+        modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedTime != null" >
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_area
+    set area_id = #{record.areaId,jdbcType=BIGINT},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      area_name = #{record.areaName,jdbcType=VARCHAR},
+      area_pinyin = #{record.areaPinyin,jdbcType=VARCHAR},
+      area_order = #{record.areaOrder,jdbcType=INTEGER},
+      parent_area_id = #{record.parentAreaId,jdbcType=BIGINT},
+      area_level = #{record.areaLevel,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=BIGINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicArea" >
+    update hs_basic_area
+    <set >
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaName != null" >
+        area_name = #{areaName,jdbcType=VARCHAR},
+      </if>
+      <if test="areaPinyin != null" >
+        area_pinyin = #{areaPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="areaOrder != null" >
+        area_order = #{areaOrder,jdbcType=INTEGER},
+      </if>
+      <if test="parentAreaId != null" >
+        parent_area_id = #{parentAreaId,jdbcType=BIGINT},
+      </if>
+      <if test="areaLevel != null" >
+        area_level = #{areaLevel,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        rd_status = #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by = #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where area_id = #{areaId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicArea" >
+    update hs_basic_area
+    set area_code = #{areaCode,jdbcType=VARCHAR},
+      area_name = #{areaName,jdbcType=VARCHAR},
+      area_pinyin = #{areaPinyin,jdbcType=VARCHAR},
+      area_order = #{areaOrder,jdbcType=INTEGER},
+      parent_area_id = #{parentAreaId,jdbcType=BIGINT},
+      area_level = #{areaLevel,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      rd_status = #{rdStatus,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=BIGINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where area_id = #{areaId,jdbcType=BIGINT}
+  </update>
+</mapper>

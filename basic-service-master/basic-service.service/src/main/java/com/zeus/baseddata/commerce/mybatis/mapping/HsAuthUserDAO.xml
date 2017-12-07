@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsAuthUserDAO">
+  <resultMap id="DtoResultMap" type="com.zeus.baseddata.entity.person.AuthUserDTO">
+	    <id column="user_id" property="userId" jdbcType="BIGINT" />
+	    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	    <result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
+	    <result column="user_type" property="userType" jdbcType="INTEGER" />
+	    <result column="employee_id" property="employeeId" jdbcType="BIGINT" />
+	    <result column="employee_code" property="employeeCode" jdbcType="VARCHAR" />
+	    <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
+	    <result column="bl_oa" property="blOa" jdbcType="INTEGER" />
+	    <result column="pda_pwd" property="pdaPwd" jdbcType="VARCHAR" />
+	    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+	    <result column="failure_times" property="failureTimes" jdbcType="INTEGER" />
+	    <result column="message_interval" property="messageInterval" jdbcType="INTEGER" />
+	    <result column="last_operate_time" property="lastOperateTime" jdbcType="TIMESTAMP" />
+	    <result column="last_operate_ip" property="lastOperateIp" jdbcType="VARCHAR" />
+	    <result column="remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="status" property="status" jdbcType="VARCHAR" />
+	    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+	    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+	    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+	    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+	    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+	    <result column="tenant_id" property="tenantId" jdbcType="INTEGER" />
+	    <result column="site_id" property="siteId" jdbcType="BIGINT" />
+        <!-- 使用collection将AuthUserRoleDTO实体类中字段属性嵌套进来(一对多的关系) -->  
+        <collection column="userId" property="roles" ofType="com.zeus.baseddata.entity.person.AuthUserRoleDTO" >  
+           <id column="id" property="id" jdbcType="BIGINT" />
+		   <result column="role_id" property="roleId" jdbcType="BIGINT" />
+		   <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+        </collection>  
+  </resultMap>
+  
+   <resultMap id="ResultMap" type="com.zeus.baseddata.mybatis.model.user.HsAuthUser">
+	    <id column="user_id" property="userId" jdbcType="BIGINT" />
+	    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	</resultMap>
+  
+  <!-- 查询用户信息(分页) -->
+  <select id="selectUserlist" resultMap="DtoResultMap" parameterType="java.util.Map" >
+    SELECT a.user_id,a.user_name,a.employee_id,b.employee_code,b.employee_name,b.id_card,b.site_id,''site_name,
+           a.expire_date,a.user_type,a.`status`,a.bl_oa,a.last_operate_ip,a.last_operate_time,''errorCount 
+	FROM hs_auth_user a,hs_basic_employee b
+	WHERE a.employee_id = b.employee_id
+     <if test="userName != null and userName != ''" >
+       AND a.user_name = #{userName,jdbcType=VARCHAR}
+     </if>
+     <if test="userType != null and userType >0 " >
+       AND user_type = #{userType,jdbcType=INTEGER}
+     </if>
+     <if test="employeeId != null and employeeId > 0" >
+       AND employee_id = #{employeeId,jdbcType=BIGINT}
+     </if>
+      <if test="employeeName != null and employeeName != ''" >
+       AND employeeName = #{employeeName,jdbcType=VARCHAR}
+     </if>
+     <if test="blOa != null and blOa > 0" >
+       AND bl_oa = #{blOa,jdbcType=INTEGER}
+     </if>
+     <if test="employeeCode != null and employeeCode != ''" >
+       AND employee_code = #{employeeCode,jdbcType=VARCHAR}
+     </if>
+     <if test="siteName != null and siteName != ''" >
+       AND site_name LIKE CONCAT(CONCAT('%', #{siteName}),'%')
+     </if>
+     <if test="roleName != null and roleName != ''" > 
+       AND a.user_id IN(SELECT a.user_id FROM hs_auth_user_role a,hs_auth_role b WHERE a.role_id = b.role_id AND b.role_name=#{roleName})
+     </if>
+     <if test="expireDate != null and expireDate != ''" >
+       <![CDATA[AND expire_date =#{expireDate,jdbcType=TIMESTAMP} ]]>  
+     </if>
+     <if test="status != null and status != ''" >
+       AND status = #{status,jdbcType=VARCHAR}
+     </if>
+     <if test="rdStatus != null and rdStatus > 0" >
+       AND rd_status = #{rdStatus,jdbcType=INTEGER}
+     </if>
+     <if test="meanId != null and meanId > 0" >
+     	AND a.user_id EXISTS(
+     	    SELECT DISTINCT c.user_id FROM hs_auth_resource a
+			LEFT JOIN hs_auth_role_resource b ON a.res_id = b.res_id
+			LEFT JOIN hs_auth_user_role c ON b.role_id = c.role_id
+			WHERE a.res_type ='MENU' AND a.rd_status =1 AND a.res_id =#{meanId,jdbcType=BIGINT}
+     	)       
+     </if>
+     
+  </select>
+  
+  <!-- 查询当前用户明细通过Id -->
+  <select id="selectDetailsById" parameterType="java.lang.Long" resultMap="DtoResultMap">  
+    SELECT  a.user_id,a.user_name,a.user_pwd,
+	        a.user_type,a.employee_id,
+	        a.bl_oa,a.pda_pwd,
+		    a.remark,a.status,
+		    a.rd_status,
+		    b.id,
+	        b.role_id,
+	        c.role_name,
+	        d.employee_code,
+            d.employee_name  
+	FROM hs_auth_user a
+    LEFT JOIN hs_auth_user_role b ON a.user_id = b.user_id
+    LEFT JOIN hs_auth_role c ON b.role_id = c.role_id
+    LEFT JOIN hs_basic_employee d ON a.employee_id = d.employee_id 
+	WHERE a.user_id =#{userId,jdbcType=BIGINT}
+  </select>  
+   
+  <!-- 查询用户信息(是否存在) -->
+  <select id="selectUserInfoExist" resultType="int" parameterType="com.zeus.baseddata.entity.person.AuthUserDTO" >
+    SELECT IF(COUNT(1) > 0,0,1)rows FROM hs_auth_user
+    <where> 
+        <if test="userName != null and userName != ''">  
+            <![CDATA[ user_name = #{userName,jdbcType=VARCHAR}]]>  
+        </if>  
+        <if test="employeeId > 0">  
+            <![CDATA[AND employee_id = #{employeeId,jdbcType=BIGINT}]]>  
+        </if>  
+        <if test="userId > 0">   
+            <![CDATA[AND user_id NOT IN(SELECT user_id FROM hs_auth_user WHERE user_id=#{userId,jdbcType=BIGINT})]]>  
+        </if> 
+    </where> 
+    LIMIT 1
+  </select>
+ 
+  <!-- 修改用户密码 -->
+  <update id="updateUserPwdByPrimaryKey" parameterType="com.zeus.baseddata.entity.person.AuthUserDTO" >
+    UPDATE hs_auth_user
+    SET user_pwd = #{userPwd,jdbcType=VARCHAR}
+    WHERE user_id = #{userId,jdbcType=BIGINT}
+  </update>
+  
+    <!--通过id集合查询用户集合  -->
+  <select id="queryList" resultMap="ResultMap" parameterType="java.util.List">
+          select user_id,user_name from hs_auth_user
+          where user_id in 
+          <foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
+            #{item}  
+        </foreach>
+  </select>
+  
+</mapper>

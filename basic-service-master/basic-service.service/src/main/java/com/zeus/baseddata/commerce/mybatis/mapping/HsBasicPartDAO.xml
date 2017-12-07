@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicPartDAO" >
+ <resultMap id="DTOResultMap" type="com.zeus.baseddata.entity.based.BasicPartDTO" >
+    <id column="part_id" property="partId" jdbcType="BIGINT" />
+    <result column="part_code" property="partCode" jdbcType="VARCHAR" />
+    <result column="part_name" property="partName" jdbcType="VARCHAR" />
+    <result column="part_pinyin" property="partPinyin" jdbcType="VARCHAR" />
+    <result column="part_order" property="partOrder" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="BIGINT" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="phone_sms" property="phoneSms" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="part_status" property="partStatus" jdbcType="INTEGER" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="created_name" property="createdName" />
+    <result column="modified_name" property="modifiedName" />
+  </resultMap>
+  
+ <!--多表关联条件查询  -->
+ <select id="selectByQueryInfo"  parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPart"   resultMap="DTOResultMap" >
+ 	select 
+    distinct
+  	part.*,c.user_name AS created_name, m.user_name AS modified_name
+    from hs_basic_part AS part
+    LEFT JOIN hs_auth_user c
+    ON c.user_id =part.created_by
+    LEFT JOIN hs_auth_user m
+    ON m.user_id =part.modified_by
+    where 1=1
+    <if test="partCode!=null and partCode!='' ">
+    AND part.part_code=#{partCode}
+    </if>
+    <if test="partName !=null and partName!=''">
+    AND part.part_name like "%${partName}%"
+    </if>
+    <if test="siteId !=null and siteId !=''">
+    AND part.site_id=#{siteId}
+    </if>
+ </select>
+ 
+ <!--逻辑删除 -->
+  <update id="updateRdStatusByPrimaryKey"  parameterType="java.lang.Long">
+  	update hs_basic_part set rd_status=0 where part_id=#{id}
+  </update>
+  
+  <!--获取最大顺序  -->
+  <select id="getMaxOrder" resultType="java.lang.Long" >
+  		select part_order from hs_basic_part  where rd_status = 1 order  by part_order   desc  limit 1
+  </select>
+
+ 
+</mapper>

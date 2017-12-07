@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicPartMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.based.HsBasicPart" >
+    <id column="part_id" property="partId" jdbcType="BIGINT" />
+    <result column="part_code" property="partCode" jdbcType="VARCHAR" />
+    <result column="part_name" property="partName" jdbcType="VARCHAR" />
+    <result column="part_pinyin" property="partPinyin" jdbcType="VARCHAR" />
+    <result column="part_order" property="partOrder" jdbcType="INTEGER" />
+    <result column="site_id" property="siteId" jdbcType="BIGINT" />
+    <result column="link_man" property="linkMan" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="phone_sms" property="phoneSms" jdbcType="VARCHAR" />
+    <result column="fax" property="fax" jdbcType="VARCHAR" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="part_status" property="partStatus" jdbcType="INTEGER" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    part_id, part_code, part_name, part_pinyin, part_order, site_id, link_man, phone, 
+    phone_sms, fax, postcode, address, part_status, start_date, end_date, remark, rd_status, 
+    created_by, created_time, modified_by, modified_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPartCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_part
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_part
+    where part_id = #{partId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_part
+    where part_id = #{partId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPartCriteria" >
+    delete from hs_basic_part
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPart" >
+    insert into hs_basic_part (part_id, part_code, part_name, 
+      part_pinyin, part_order, site_id, 
+      link_man, phone, phone_sms, 
+      fax, postcode, address, 
+      part_status, start_date, end_date, 
+      remark, rd_status, created_by, 
+      created_time, modified_by, modified_time
+      )
+    values (#{partId,jdbcType=BIGINT}, #{partCode,jdbcType=VARCHAR}, #{partName,jdbcType=VARCHAR}, 
+      #{partPinyin,jdbcType=VARCHAR}, #{partOrder,jdbcType=INTEGER}, #{siteId,jdbcType=BIGINT}, 
+      #{linkMan,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{phoneSms,jdbcType=VARCHAR}, 
+      #{fax,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{partStatus,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{remark,jdbcType=VARCHAR}, #{rdStatus,jdbcType=INTEGER}, #{createdBy,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=BIGINT}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPart" >
+    insert into hs_basic_part
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="partId != null" >
+        part_id,
+      </if>
+      <if test="partCode != null" >
+        part_code,
+      </if>
+      <if test="partName != null" >
+        part_name,
+      </if>
+      <if test="partPinyin != null" >
+        part_pinyin,
+      </if>
+      <if test="partOrder != null" >
+        part_order,
+      </if>
+      <if test="siteId != null" >
+        site_id,
+      </if>
+      <if test="linkMan != null" >
+        link_man,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="phoneSms != null" >
+        phone_sms,
+      </if>
+      <if test="fax != null" >
+        fax,
+      </if>
+      <if test="postcode != null" >
+        postcode,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="partStatus != null" >
+        part_status,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="rdStatus != null" >
+        rd_status,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="partId != null" >
+        #{partId,jdbcType=BIGINT},
+      </if>
+      <if test="partCode != null" >
+        #{partCode,jdbcType=VARCHAR},
+      </if>
+      <if test="partName != null" >
+        #{partName,jdbcType=VARCHAR},
+      </if>
+      <if test="partPinyin != null" >
+        #{partPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="partOrder != null" >
+        #{partOrder,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="linkMan != null" >
+        #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneSms != null" >
+        #{phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="partStatus != null" >
+        #{partStatus,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPartCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_part
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_part
+    <set >
+      <if test="record.partId != null" >
+        part_id = #{record.partId,jdbcType=BIGINT},
+      </if>
+      <if test="record.partCode != null" >
+        part_code = #{record.partCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partName != null" >
+        part_name = #{record.partName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partPinyin != null" >
+        part_pinyin = #{record.partPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partOrder != null" >
+        part_order = #{record.partOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.siteId != null" >
+        site_id = #{record.siteId,jdbcType=BIGINT},
+      </if>
+      <if test="record.linkMan != null" >
+        link_man = #{record.linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneSms != null" >
+        phone_sms = #{record.phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fax != null" >
+        fax = #{record.fax,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postcode != null" >
+        postcode = #{record.postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.partStatus != null" >
+        part_status = #{record.partStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.startDate != null" >
+        start_date = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.endDate != null" >
+        end_date = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rdStatus != null" >
+        rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null" >
+        modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedTime != null" >
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_part
+    set part_id = #{record.partId,jdbcType=BIGINT},
+      part_code = #{record.partCode,jdbcType=VARCHAR},
+      part_name = #{record.partName,jdbcType=VARCHAR},
+      part_pinyin = #{record.partPinyin,jdbcType=VARCHAR},
+      part_order = #{record.partOrder,jdbcType=INTEGER},
+      site_id = #{record.siteId,jdbcType=BIGINT},
+      link_man = #{record.linkMan,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      phone_sms = #{record.phoneSms,jdbcType=VARCHAR},
+      fax = #{record.fax,jdbcType=VARCHAR},
+      postcode = #{record.postcode,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
+      part_status = #{record.partStatus,jdbcType=INTEGER},
+      start_date = #{record.startDate,jdbcType=DATE},
+      end_date = #{record.endDate,jdbcType=DATE},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=BIGINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPart" >
+    update hs_basic_part
+    <set >
+      <if test="partCode != null" >
+        part_code = #{partCode,jdbcType=VARCHAR},
+      </if>
+      <if test="partName != null" >
+        part_name = #{partName,jdbcType=VARCHAR},
+      </if>
+      <if test="partPinyin != null" >
+        part_pinyin = #{partPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="partOrder != null" >
+        part_order = #{partOrder,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null" >
+        site_id = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="linkMan != null" >
+        link_man = #{linkMan,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneSms != null" >
+        phone_sms = #{phoneSms,jdbcType=VARCHAR},
+      </if>
+      <if test="fax != null" >
+        fax = #{fax,jdbcType=VARCHAR},
+      </if>
+      <if test="postcode != null" >
+        postcode = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="partStatus != null" >
+        part_status = #{partStatus,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        rd_status = #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by = #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where part_id = #{partId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicPart" >
+    update hs_basic_part
+    set part_code = #{partCode,jdbcType=VARCHAR},
+      part_name = #{partName,jdbcType=VARCHAR},
+      part_pinyin = #{partPinyin,jdbcType=VARCHAR},
+      part_order = #{partOrder,jdbcType=INTEGER},
+      site_id = #{siteId,jdbcType=BIGINT},
+      link_man = #{linkMan,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      phone_sms = #{phoneSms,jdbcType=VARCHAR},
+      fax = #{fax,jdbcType=VARCHAR},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      part_status = #{partStatus,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      remark = #{remark,jdbcType=VARCHAR},
+      rd_status = #{rdStatus,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=BIGINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where part_id = #{partId,jdbcType=BIGINT}
+  </update>
+</mapper>

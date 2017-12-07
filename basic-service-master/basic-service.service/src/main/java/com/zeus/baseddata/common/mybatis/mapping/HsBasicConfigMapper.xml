@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.based.HsBasicConfig" >
+    <id column="global_config_id" property="globalConfigId" jdbcType="BIGINT" />
+    <result column="global_config_code" property="globalConfigCode" jdbcType="VARCHAR" />
+    <result column="global_config_name" property="globalConfigName" jdbcType="VARCHAR" />
+    <result column="global_config_value" property="globalConfigValue" jdbcType="VARCHAR" />
+    <result column="bl_user" property="blUser" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    global_config_id, global_config_code, global_config_name, global_config_value, bl_user, 
+    remark, rd_status, created_by, created_time, modified_by, modified_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfigCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_config
+    where global_config_id = #{globalConfigId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_config
+    where global_config_id = #{globalConfigId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfigCriteria" >
+    delete from hs_basic_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfig" >
+    insert into hs_basic_config (global_config_id, global_config_code, 
+      global_config_name, global_config_value, bl_user, 
+      remark, rd_status, created_by, 
+      created_time, modified_by, modified_time
+      )
+    values (#{globalConfigId,jdbcType=BIGINT}, #{globalConfigCode,jdbcType=VARCHAR}, 
+      #{globalConfigName,jdbcType=VARCHAR}, #{globalConfigValue,jdbcType=VARCHAR}, #{blUser,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{rdStatus,jdbcType=INTEGER}, #{createdBy,jdbcType=BIGINT}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=BIGINT}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfig" >
+    insert into hs_basic_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="globalConfigId != null" >
+        global_config_id,
+      </if>
+      <if test="globalConfigCode != null" >
+        global_config_code,
+      </if>
+      <if test="globalConfigName != null" >
+        global_config_name,
+      </if>
+      <if test="globalConfigValue != null" >
+        global_config_value,
+      </if>
+      <if test="blUser != null" >
+        bl_user,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="rdStatus != null" >
+        rd_status,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="globalConfigId != null" >
+        #{globalConfigId,jdbcType=BIGINT},
+      </if>
+      <if test="globalConfigCode != null" >
+        #{globalConfigCode,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConfigName != null" >
+        #{globalConfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConfigValue != null" >
+        #{globalConfigValue,jdbcType=VARCHAR},
+      </if>
+      <if test="blUser != null" >
+        #{blUser,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfigCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_config
+    <set >
+      <if test="record.globalConfigId != null" >
+        global_config_id = #{record.globalConfigId,jdbcType=BIGINT},
+      </if>
+      <if test="record.globalConfigCode != null" >
+        global_config_code = #{record.globalConfigCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.globalConfigName != null" >
+        global_config_name = #{record.globalConfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.globalConfigValue != null" >
+        global_config_value = #{record.globalConfigValue,jdbcType=VARCHAR},
+      </if>
+      <if test="record.blUser != null" >
+        bl_user = #{record.blUser,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rdStatus != null" >
+        rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null" >
+        modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedTime != null" >
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_config
+    set global_config_id = #{record.globalConfigId,jdbcType=BIGINT},
+      global_config_code = #{record.globalConfigCode,jdbcType=VARCHAR},
+      global_config_name = #{record.globalConfigName,jdbcType=VARCHAR},
+      global_config_value = #{record.globalConfigValue,jdbcType=VARCHAR},
+      bl_user = #{record.blUser,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=BIGINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfig" >
+    update hs_basic_config
+    <set >
+      <if test="globalConfigCode != null" >
+        global_config_code = #{globalConfigCode,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConfigName != null" >
+        global_config_name = #{globalConfigName,jdbcType=VARCHAR},
+      </if>
+      <if test="globalConfigValue != null" >
+        global_config_value = #{globalConfigValue,jdbcType=VARCHAR},
+      </if>
+      <if test="blUser != null" >
+        bl_user = #{blUser,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        rd_status = #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by = #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where global_config_id = #{globalConfigId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicConfig" >
+    update hs_basic_config
+    set global_config_code = #{globalConfigCode,jdbcType=VARCHAR},
+      global_config_name = #{globalConfigName,jdbcType=VARCHAR},
+      global_config_value = #{globalConfigValue,jdbcType=VARCHAR},
+      bl_user = #{blUser,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      rd_status = #{rdStatus,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=BIGINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where global_config_id = #{globalConfigId,jdbcType=BIGINT}
+  </update>
+</mapper>

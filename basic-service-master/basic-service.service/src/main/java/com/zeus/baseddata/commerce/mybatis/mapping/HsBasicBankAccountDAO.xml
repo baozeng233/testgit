@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicBankAccountDAO" >	
+<resultMap type="com.zeus.baseddata.entity.based.BankAccountDTO" id="DtoResultMap">
+	<id column="account_id" property="accountId" jdbcType="BIGINT" />
+    <result column="account_code" property="accountCode" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_pinyin" property="accountPinyin" jdbcType="VARCHAR" />
+    <result column="account_order" property="accountOrder" jdbcType="INTEGER" />
+    <result column="parent_bank_id" property="parentBankId" jdbcType="BIGINT" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_name" property="createdName"/>
+    <result column="modified_name" property="modifiedName"/>
+    <result column="parent_bank_name" property="parentBankName"/>
+    <result column="city_name" property="cityName"/>
+    <result column="province_name" property="provinceName"/>
+</resultMap>
+
+<!--多表关联条件查询  -->
+<select id="selectByQueryInfo" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicBankAccount"  resultMap="DtoResultMap">
+		SELECT DISTINCT 
+		bank.*,c.user_name AS created_name, m.user_name AS modified_name
+		,dict.dict_name AS parent_bank_name, city.city_name,province.province_name
+		FROM hs_basic_bank_account AS bank
+		LEFT JOIN hs_auth_user  AS c
+		ON c.user_id = bank.created_by
+		LEFT JOIN hs_auth_user AS m
+		ON m.user_id=bank.modified_by
+		LEFT JOIN hs_basic_dict  AS dict
+		ON dict.dict_id =bank.parent_bank_id
+		LEFT JOIN hs_basic_city AS city
+		ON bank.city_id =city.city_id
+		LEFT JOIN hs_basic_province AS province
+		ON city.province_id =province.province_id
+		where bank.rd_status=1
+	<if test="parentBankId !=null and parentBankId !=''">
+		AND bank.parent_bank_id=#{parentBankId}
+	</if>
+	<if test="cityId !=null and cityId !=''">
+		AND bank.city_id =#{cityId} 
+	</if>
+	<if test="accountName !=null and accountName !=''">
+		AND bank.account_name like "%${accountName}%"
+	</if>
+</select>
+
+<!-- 逻辑删除开户行信息 -->
+<update id="updateRdStatusByPrimaryKey"   parameterType="java.lang.Long" >
+	update hs_basic_bank_account set rd_status=0 where account_id=#{accountId}
+</update>
+
+<!--查询最大顺序  -->
+<select id="queryMaxOrder"  resultType="java.lang.Long" >
+	select account_order from  hs_basic_bank_account order by account_order desc limit 1
+</select>
+
+<!--通过所属银行，所属城市查询开户行列表  -->
+
+<select id="selectBankList"  parameterType="java.lang.Long"  resultMap="DtoResultMap" >
+		select account_id, account_name from hs_basic_bank_account where rd_status=1 
+		<if test="parentBankId !=null and parentBankId !='' ">
+		and parent_bank_id=#{parentBankId} 
+		</if>
+		<if test="cityId !=null and cityId !='' ">
+		and city_id=#{cityId}
+		</if>
+</select>
+
+ 
+</mapper>

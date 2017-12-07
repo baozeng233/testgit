@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicDictDAO">
+  <resultMap id="dictResultDto" type="com.zeus.baseddata.entity.based.HsBasicDictDTO" autoMapping="true">
+  </resultMap>
+
+  <!-- 查询(带分页) -->
+  <select id="queryGrid" resultMap="dictResultDto" parameterType="java.util.Map">
+    SELECT a.dict_id,a.dict_code,a.dict_name,a.dict_pinyin,a.dict_order,a.type_code,a.remark,a.rd_status,a.created_by,a.created_time,a.modified_by,a.modified_time
+	FROM hs_basic_dict a
+    WHERE 1=1
+    <if test="dictCode != null and dictCode != ''">  
+          AND a.dict_code = ${dictCode} 
+    </if>
+    <if test="dictName != null and dictName != ''">  
+          AND a.dict_name = ${dictName} 
+    </if>
+    <if test="dictPinyin != null and dictPinyin != ''">  
+          AND a.dict_pinyin = ${dictPinyin} 
+    </if>
+  </select>
+   
+</mapper>

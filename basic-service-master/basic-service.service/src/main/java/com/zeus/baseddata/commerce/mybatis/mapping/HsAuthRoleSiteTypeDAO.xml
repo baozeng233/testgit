@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsAuthRoleSiteTypeDAO" >
+  
+  <!-- 批量新增角色资源关联 -->
+ <insert id="insertByBatch" parameterType="java.util.List">
+	  insert into hs_auth_role_site_type (id,site_type_id,role_id)
+	  values
+	  <foreach collection="list" item="item"  index="index" separator=",">
+	  (#{item.id,jdbcType=BIGINT},#{item.siteTypeId,jdbcType=BIGINT},#{item.roleId,jdbcType=BIGINT})
+	  </foreach>
+ </insert>
+ 
+</mapper>

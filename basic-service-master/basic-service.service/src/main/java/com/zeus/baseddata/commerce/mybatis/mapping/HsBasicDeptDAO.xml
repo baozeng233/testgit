@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicDeptDAO">
+  <resultMap id="deptResultDto" type="com.zeus.baseddata.entity.person.BasicDeptDTO" autoMapping="true">
+  </resultMap>
+  
+  <select   id="selectBasicDeptDtoByParams" resultMap="deptResultDto">
+  	SELECT a.*,b.dept_name AS parentDeptName ,c.employee_name AS managerEmployeeName
+	FROM hs_basic_dept a LEFT JOIN hs_basic_dept b ON a.parent_dept_id=b.dept_id
+	LEFT JOIN hs_basic_employee c ON a.manager_employee_id=c.employee_id
+	where 1=1 and a.rd_status=1
+	<if test="deptid != null and deptid != ''">  
+          AND a.dept_id = ${deptid} 
+    </if>
+    <if test="siteId != null and siteId != ''">  
+          AND a.site_type_id = ${siteId} 
+    </if>
+    ORDER BY a.area_level  
+  </select>
+   
+</mapper>

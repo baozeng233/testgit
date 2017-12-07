@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.common.mybatis.dao.HsBasicCountyMapper" >
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.based.HsBasicCounty" >
+    <id column="county_id" property="countyId" jdbcType="BIGINT" />
+    <result column="county_code" property="countyCode" jdbcType="VARCHAR" />
+    <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+    <result column="county_pinyin" property="countyPinyin" jdbcType="VARCHAR" />
+    <result column="county_order" property="countyOrder" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="overall_flag" property="overallFlag" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    county_id, county_code, county_name, county_pinyin, county_order, city_id, postcode, 
+    remark, rd_status, overall_flag, created_by, created_time, modified_by, modified_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCountyCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hs_basic_county
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from hs_basic_county
+    where county_id = #{countyId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from hs_basic_county
+    where county_id = #{countyId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCountyCriteria" >
+    delete from hs_basic_county
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCounty" >
+    insert into hs_basic_county (county_id, county_code, county_name, 
+      county_pinyin, county_order, city_id, 
+      postcode, remark, rd_status, 
+      overall_flag, created_by, created_time, 
+      modified_by, modified_time)
+    values (#{countyId,jdbcType=BIGINT}, #{countyCode,jdbcType=VARCHAR}, #{countyName,jdbcType=VARCHAR}, 
+      #{countyPinyin,jdbcType=VARCHAR}, #{countyOrder,jdbcType=INTEGER}, #{cityId,jdbcType=BIGINT}, 
+      #{postcode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{rdStatus,jdbcType=INTEGER}, 
+      #{overallFlag,jdbcType=INTEGER}, #{createdBy,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedBy,jdbcType=BIGINT}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCounty" >
+    insert into hs_basic_county
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="countyId != null" >
+        county_id,
+      </if>
+      <if test="countyCode != null" >
+        county_code,
+      </if>
+      <if test="countyName != null" >
+        county_name,
+      </if>
+      <if test="countyPinyin != null" >
+        county_pinyin,
+      </if>
+      <if test="countyOrder != null" >
+        county_order,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="postcode != null" >
+        postcode,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="rdStatus != null" >
+        rd_status,
+      </if>
+      <if test="overallFlag != null" >
+        overall_flag,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by,
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="countyId != null" >
+        #{countyId,jdbcType=BIGINT},
+      </if>
+      <if test="countyCode != null" >
+        #{countyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="countyName != null" >
+        #{countyName,jdbcType=VARCHAR},
+      </if>
+      <if test="countyPinyin != null" >
+        #{countyPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="countyOrder != null" >
+        #{countyOrder,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="postcode != null" >
+        #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="overallFlag != null" >
+        #{overallFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCountyCriteria" resultType="java.lang.Integer" >
+    select count(*) from hs_basic_county
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hs_basic_county
+    <set >
+      <if test="record.countyId != null" >
+        county_id = #{record.countyId,jdbcType=BIGINT},
+      </if>
+      <if test="record.countyCode != null" >
+        county_code = #{record.countyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyName != null" >
+        county_name = #{record.countyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyPinyin != null" >
+        county_pinyin = #{record.countyPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyOrder != null" >
+        county_order = #{record.countyOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityId != null" >
+        city_id = #{record.cityId,jdbcType=BIGINT},
+      </if>
+      <if test="record.postcode != null" >
+        postcode = #{record.postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rdStatus != null" >
+        rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.overallFlag != null" >
+        overall_flag = #{record.overallFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdBy != null" >
+        created_by = #{record.createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null" >
+        modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.modifiedTime != null" >
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hs_basic_county
+    set county_id = #{record.countyId,jdbcType=BIGINT},
+      county_code = #{record.countyCode,jdbcType=VARCHAR},
+      county_name = #{record.countyName,jdbcType=VARCHAR},
+      county_pinyin = #{record.countyPinyin,jdbcType=VARCHAR},
+      county_order = #{record.countyOrder,jdbcType=INTEGER},
+      city_id = #{record.cityId,jdbcType=BIGINT},
+      postcode = #{record.postcode,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      rd_status = #{record.rdStatus,jdbcType=INTEGER},
+      overall_flag = #{record.overallFlag,jdbcType=INTEGER},
+      created_by = #{record.createdBy,jdbcType=BIGINT},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{record.modifiedBy,jdbcType=BIGINT},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCounty" >
+    update hs_basic_county
+    <set >
+      <if test="countyCode != null" >
+        county_code = #{countyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="countyName != null" >
+        county_name = #{countyName,jdbcType=VARCHAR},
+      </if>
+      <if test="countyPinyin != null" >
+        county_pinyin = #{countyPinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="countyOrder != null" >
+        county_order = #{countyOrder,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=BIGINT},
+      </if>
+      <if test="postcode != null" >
+        postcode = #{postcode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="rdStatus != null" >
+        rd_status = #{rdStatus,jdbcType=INTEGER},
+      </if>
+      <if test="overallFlag != null" >
+        overall_flag = #{overallFlag,jdbcType=INTEGER},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=BIGINT},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null" >
+        modified_by = #{modifiedBy,jdbcType=BIGINT},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where county_id = #{countyId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCounty" >
+    update hs_basic_county
+    set county_code = #{countyCode,jdbcType=VARCHAR},
+      county_name = #{countyName,jdbcType=VARCHAR},
+      county_pinyin = #{countyPinyin,jdbcType=VARCHAR},
+      county_order = #{countyOrder,jdbcType=INTEGER},
+      city_id = #{cityId,jdbcType=BIGINT},
+      postcode = #{postcode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      rd_status = #{rdStatus,jdbcType=INTEGER},
+      overall_flag = #{overallFlag,jdbcType=INTEGER},
+      created_by = #{createdBy,jdbcType=BIGINT},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=BIGINT},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where county_id = #{countyId,jdbcType=BIGINT}
+  </update>
+</mapper>

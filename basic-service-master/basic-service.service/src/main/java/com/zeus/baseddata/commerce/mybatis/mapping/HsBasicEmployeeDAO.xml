@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicEmployeeDAO">
+  <resultMap id="basicResultDto" type="com.zeus.baseddata.entity.person.BasicEmployeeDTO" autoMapping="true">
+  </resultMap>
+  <resultMap id="returnResultDto" type="com.zeus.baseddata.commerce.entity.BasicEmployeeVO" autoMapping="true">
+  </resultMap>
+  <resultMap id="BaseResultMap" type="com.zeus.baseddata.mybatis.model.person.HsBasicEmployee" >
+	   <id column="employee_id" property="employeeId" jdbcType="BIGINT" />
+	   <result column="employee_name" property="employeeName" jdbcType="VARCHAR" />
+    </resultMap>
+  <select   id="selectBasicEmployeeDtoByParams" resultMap="basicResultDto">
+  	SELECT a.*,c.dept_name deptName , b.dept_job_name deptJobName ,b.dept_id deptId ,d.user_name createdByName,e.user_name modifyName
+	FROM hs_basic_employee a LEFT JOIN hs_basic_dept_job b ON a.dept_job_id=b.dept_job_id
+	LEFT JOIN hs_basic_dept c ON b.dept_id=c.dept_id 
+	LEFT JOIN hs_auth_user d ON a.created_by=d.user_id
+	LEFT JOIN hs_auth_user e ON a.modified_by=e.user_id
+	where 1=1 and a.rd_status=1
+	<if test="empid != null and empid != ''">  
+          AND a.employee_id = "${empid}"
+    </if>
+    <if test="code != null and code != ''">  
+          AND a.employee_code like "%${code}%"
+    </if>
+    <if test="empname != null and empname != ''">  
+          AND a.employee_name like  "%${empname}%"
+    </if>
+    <if test="site != null and site != ''">  
+          AND a.site_id =  ${site}
+    </if>
+    <if test="empno != null and empno != ''">  
+          AND a.employee_no like  "%${empno}%"
+    </if>
+    <if test="pinyin != null and pinyin != ''">  
+          AND a.employee_pinyin like  "%${pinyin}%"
+    </if>
+  </select>
+  
+  <select id="selectEmployeeByIds" resultMap="BaseResultMap">
+	  select employee_id,employee_name from hs_basic_employee
+	  where employee_id in 
+	  <foreach collection="list" item="listItem" open="(" close=")" separator="," >
+        #{listItem}
+      </foreach>
+  </select>
+  
+  <select id="selectBasicEmployeeSimple" resultMap="BaseResultMap" parameterType="java.lang.String">
+	  select employee_id,employee_code,employee_name,employee_pinyin from hs_basic_employee
+	  where   rd_status=1 and
+	  (employee_code like #{s} or  employee_name like #{s} or employee_pinyin like #{s} )
+  </select>
+   
+</mapper>

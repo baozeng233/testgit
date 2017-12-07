@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicTownDAO">
+
+<resultMap id="ResultMap" type="com.zeus.baseddata.entity.based.TownDTO" >
+    <id column="town_id" property="townId" jdbcType="BIGINT" />
+    <result column="town_code" property="townCode" jdbcType="VARCHAR" />
+    <result column="town_name" property="townName" jdbcType="VARCHAR" />
+    <result column="town_pinyin" property="townPinyin" jdbcType="VARCHAR" />
+    <result column="town_order" property="townOrder" jdbcType="INTEGER" />
+    <result column="county_id" property="countyId" jdbcType="BIGINT" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="reach" property="reach" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+     <result column="country_name" property="countryName"/>
+    <result column="province_name" property="provinceName"/>
+    <result column="city_name" property="cityName"/>
+    <result column="county_name" property="countyName"/>
+  </resultMap>
+
+	<!-- 逻辑删除乡镇 -->
+	<update id="updateRdStatusByTownId" parameterType="java.lang.Long">
+		update hs_basic_town set rd_status =0 where town_id=#{id}
+	</update>
+	
+	<!-- 获取最大顺序 -->
+<select id="queryMaxOrder"  resultType="java.lang.Long" >
+	select town_order from hs_basic_town where rd_status = 1 order by town_order desc limit 1
+</select>
+
+<!-- 关联查询明细 -->
+<select id="queryInfo"  parameterType="java.lang.Long" resultMap="ResultMap" >
+  select town.*, country.country_name ,province.province_name,city.city_name,county.county_name
+  from hs_basic_town AS town
+  LEFT JOIN hs_basic_county AS county
+  ON town.county_id =county.county_id
+  LEFT JOIN hs_basic_city AS city
+  ON county.city_id =city.city_id
+  LEFT JOIN  hs_basic_province AS province
+  ON province.province_id=city.province_id
+  LEFT JOIN hs_basic_country country
+  ON province.country_id =country.country_id
+  where town.town_id=#{townId}
+</select>
+
+</mapper>

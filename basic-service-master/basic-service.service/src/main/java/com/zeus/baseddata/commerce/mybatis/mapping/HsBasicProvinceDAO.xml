@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicProvinceDAO" >
+
+<resultMap id="ResultMap" type="com.zeus.baseddata.entity.based.ProvinceDTO" >
+    <id column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="province_code" property="provinceCode" jdbcType="VARCHAR" />
+    <result column="province_name" property="provinceName" jdbcType="VARCHAR" />
+    <result column="province_pinyin" property="provincePinyin" jdbcType="VARCHAR" />
+    <result column="province_order" property="provinceOrder" jdbcType="INTEGER" />
+    <result column="country_id" property="countryId" jdbcType="BIGINT" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="provincial_capita" property="provincialCapita" jdbcType="VARCHAR" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="country_name" property="countryName"/>
+  </resultMap>
+
+<!--逻辑删除省份  -->
+ <update id="updateRdStatusByProvinceId" parameterType="java.lang.Long"  >
+ 	update hs_basic_province set rd_status =0 where province_id=#{id}
+ </update>
+ 
+ <!-- 获取最大顺序 -->
+<select id="queryMaxOrder"  resultType="java.lang.Long" >
+	select province_order from hs_basic_province where rd_status = 1 order by province_order desc limit 1
+</select>
+
+<!-- 关联查询明细 -->
+<select id="queryInfo"  parameterType="java.lang.Long" resultMap="ResultMap" >
+  select province.* ,country.country_name
+  from hs_basic_province AS province
+  LEFT JOIN  hs_basic_country AS country
+  ON province.country_id=country.country_id
+  where province.province_id=#{provinceId}
+</select>
+ 
+
+</mapper>

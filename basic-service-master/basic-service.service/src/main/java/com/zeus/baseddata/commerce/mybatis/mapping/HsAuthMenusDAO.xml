@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsAuthMenusDAO" >
+  <select id="selectHsAuthMenusById" resultType="com.zeus.baseddata.entity.user.HsAuthMenusDTO" parameterType="java.lang.Long" >
+    select 
+    t.menu_id, t.menu_code, t.menu_name, t.menu_type, t.menu_order, t.menu_url, t.image_path, t.parent_menu_id, 
+    t.dll_name, t.invoke_name, t.alt_key, t.tips, t.is_offline, t.is_sms_check, t.remark, t.created_by, 
+    t.created_time, t.modified_by, t.modified_time, t.tenant_id, t.status,pm.menu_name as parent_menu_name
+    from hs_auth_menus t 
+    left join hs_auth_menus pm  on t.parent_menu_id = pm.menu_id
+    where t.menu_id = #{menuId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicAreaDAO" >
+	<resultMap id="baseResult" type="com.zeus.baseddata.entity.based.BasicAreaDTO" autoMapping="true">
+  	</resultMap>
+	
+  <select id="getCodeByAreaLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	SELECT COUNT(1)+1 FROM hs_basic_area WHERE 
+  	area_level =#{id}
+  </select>
+  
+  <select id="getAreaDTOById" parameterType="java.lang.Long" resultMap="baseResult">
+  	SELECT a.*,b.area_name parentName FROM hs_basic_area a 
+  	LEFT JOIN hs_basic_area b ON a.parent_area_id =b.area_id
+  	where   a.rd_status=1 and 
+  	a.area_id=#{id}
+  </select>
+</mapper>

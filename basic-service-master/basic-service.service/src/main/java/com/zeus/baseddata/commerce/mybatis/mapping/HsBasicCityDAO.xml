@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicCityDAO" >
+<resultMap id="ResultMap" type="com.zeus.baseddata.entity.based.CityDTO" >
+    <id column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="city_name" property="cityName" jdbcType="VARCHAR" />
+    <result column="city_pinyin" property="cityPinyin" jdbcType="VARCHAR" />
+    <result column="city_order" property="cityOrder" jdbcType="INTEGER" />
+    <result column="province_id" property="provinceId" jdbcType="BIGINT" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="country_name" property="countryName"/>
+    <result column="province_name" property="provinceName"/>
+  </resultMap>
+
+<!--逻辑删除城市信息  -->
+<update id="updateRdStatusByCityId"  parameterType="java.lang.Long">
+	update hs_basic_city set rd_status =0 where city_id=#{id}
+</update>
+
+<!-- 获取最大顺序 -->
+<select id="queryMaxOrder"  resultType="java.lang.Long" >
+	select city_order from hs_basic_city where rd_status = 1 order by city_order desc limit 1
+</select>
+
+<!-- 关联查询明细 -->
+<select id="queryInfo"  parameterType="java.lang.Long" resultMap="ResultMap" >
+  select city.*, country.country_name ,province.province_name
+  from hs_basic_city AS city
+  LEFT JOIN  hs_basic_province AS province
+  ON province.province_id=city.province_id
+  LEFT JOIN hs_basic_country country
+  ON province.country_id =country.country_id
+  where city.city_id=#{cityId}
+</select>
+  
+</mapper>

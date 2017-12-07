@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicConfigDAO">
+  <resultMap id="configResultDto" type="com.zeus.baseddata.entity.based.HsBasicConfigDTO" autoMapping="true">
+  </resultMap>
+
+  <!-- 查询(带分页) -->
+  <select id="queryGrid" resultMap="configResultDto" parameterType="java.util.Map">
+    SELECT a.global_config_id,a.global_config_code,a.global_config_name,a.global_config_value,a.bl_user,a.remark,a.rd_status,a.created_by,a.created_time,a.modified_by,a.modified_time
+	FROM hs_basic_config a
+    WHERE 1=1
+    <if test="globalConfigCode != null and globalConfigCode != ''">  
+          AND a.global_config_code = #{globalConfigCode} 
+    </if>
+    <if test="globalConfigName != null and globalConfigName != ''">  
+          AND a.global_config_name = #{globalConfigName} 
+    </if>
+  </select>
+    
+</mapper>

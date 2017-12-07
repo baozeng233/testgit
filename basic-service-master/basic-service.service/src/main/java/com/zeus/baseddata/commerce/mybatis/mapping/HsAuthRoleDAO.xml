@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsAuthRoleDAO">
+	<resultMap id="baseResult" type="com.zeus.baseddata.mybatis.model.user.HsAuthRole" autoMapping="true">
+    </resultMap>
+    <resultMap id="ResultMap" type="com.zeus.baseddata.entity.user.AuthRoleInfoDTO">
+	  <id column="role_id" property="roleId" />
+	  <result column="role_name" property="roleName" />
+	  <result column="role_code" property="roleCode" />
+	  <result column="role_pinyin" property="rolePinyin" />
+	  <result column="role_order" property="roleOrder" />
+	  <result column="is_use" property="isUse" />
+	  <result column="is_owe" property="isOwe" />
+	  <result column="is_basic" property="isBasic" />
+	  <result column="remark" property="remark" />
+	  <result column="created_by" property="createdBy" />
+	  <result column="created_time" property="createdTime" />
+	  <result column="modified_by" property="modifiedBy" />
+	  <result column="modified_time" property="modifiedTime" />
+	  <result column="created_name" property="createdUser" />
+	  <result column="modified_name" property="modifiedUser" />
+	 </resultMap>
+	<resultMap id="DtoResultMap" type="com.zeus.baseddata.entity.user.AuthRoleInfoDTO">
+	  <id column="role_id" property="roleId" />
+	  <result column="role_name" property="roleName" />
+	  <result column="role_code" property="roleCode" />
+	  <result column="role_pinyin" property="rolePinyin" />
+	  <result column="role_order" property="roleOrder" />
+	  <result column="is_use" property="isUse" />
+	  <result column="is_owe" property="isOwe" />
+	  <result column="is_basic" property="isBasic" />
+	  <result column="remark" property="remark" />
+	  <result column="created_by" property="createdBy" />
+	  <result column="created_time" property="createdTime" />
+	  <result column="modified_by" property="modifiedBy" />
+	  <result column="modified_time" property="modifiedTime" />
+	  <result column="created_name" property="createdUser" />
+	  <result column="modified_name" property="modifiedUser" />
+	  <!--网点类型关联映射  -->
+	  <collection property="siteTypes"    ofType="java.lang.Long"     >
+	    <constructor>
+	    		 <idArg column="dict_id" />
+	    </constructor>
+	  </collection>
+	  <!--资源信息关联映射 -->
+		<collection property="resources"
+			ofType="com.zeus.baseddata.entity.user.AuthResourceDTO">
+			<id column="res_id" property="resId" />
+			<result column="res_code" property="resCode" />
+			<result column="res_name" property="resName" />
+			<result column="res_type" property="resType" />
+			<result column="req_method" property="reqMethod" />
+			<result column="res_url" property="resUrl" />
+			<result column="res_desc" property="resDesc" />
+			<result column="res_seq" property="resSeq" />
+			<result column="parent_res_id" property="parentResId" />
+			<result column="res_level" property="resLevel" />
+			<result column="access_power" property="accessPower" />
+			<result column="grant_power" property="grantPower" />
+		</collection>
+	</resultMap>
+	<!-- 逻辑删除角色 -->
+	<update id="updateRdStatusByPrimaryKey" parameterType="java.lang.Long">
+		update hs_auth_role set rd_status=0
+		where role_id=#{roleId,jdbcType=BIGINT}
+	</update>
+	
+		<!--多表关联查询  -->
+	<select id="selectByQueryInfo" resultMap="ResultMap"  parameterType="com.zeus.baseddata.entity.user.AuthRoleSearchDTO"  >
+		    SELECT
+            distinct
+            role.role_id, role.role_code, role.role_name, role.role_pinyin, role.role_order, 
+		    role.remark,  role.created_by, role.created_time, role.modified_by, role.modified_time
+		    ,c.user_name AS created_name, m.user_name AS modified_name
+			fROM  hs_auth_role AS role
+		<if test="resName!=null and resName!=''">
+		    LEFT JOIN hs_auth_role_resource
+			ON role.role_id=hs_auth_role_resource.role_id
+			LEFT JOIN 
+			(select * from hs_auth_resource
+		    where hs_auth_resource.res_name=#{resName}
+		    )AS res
+		    ON hs_auth_role_resource.res_id=res.res_id
+		</if>
+		<if test="dictName!=null and dictName!=''" >
+			LEFT JOIN hs_auth_role_site_type
+			ON role.role_id = hs_auth_role_site_type.role_id
+			LEFT JOIN 
+			(select * from hs_basic_dict
+		    where hs_basic_dict.dict_name=#{dictName}
+			)AS dict
+			ON hs_auth_role_site_type.site_type_id =dict.dict_id
+		</if>
+		LEFT JOIN hs_auth_user c ON  role.created_by =c.user_id
+		LEFT JOIN hs_auth_user m ON  role.modified_by =m.user_id
+		where role.rd_status=1
+		<if test="roleName!=null and roleName!=''">
+		     AND role.role_name like "%${roleName}%"
+		</if>
+	</select>
+	
+	<!-- 通过id获取角色关联的详细信息 (资源，网点) -->
+	<select id="getRoleInfoById" parameterType="java.lang.Long" resultMap="DtoResultMap" >
+		 select 
+            distinct
+            role.role_id, role.role_code, role.role_name, role.role_pinyin, role.role_order, 
+		    role.remark,  role.is_use, role.is_basic, role.is_owe, 
+		    dict.dict_id,
+		    res.res_id,res.res_name	,res.parent_res_id, res.res_level,
+		    hs_auth_role_resource.access_power, hs_auth_role_resource.grant_power    
+			from 
+			(select * from  hs_auth_role
+			where hs_auth_role.rd_status=1 AND hs_auth_role.role_id=#{roleId}
+			) AS role
+		    LEFT JOIN hs_auth_role_resource
+			ON role.role_id=hs_auth_role_resource.role_id
+			LEFT JOIN hs_auth_resource AS res
+		    ON hs_auth_role_resource.res_id=res.res_id
+			LEFT JOIN hs_auth_role_site_type
+			ON role.role_id = hs_auth_role_site_type.role_id
+			LEFT JOIN hs_basic_dict AS dict
+			ON hs_auth_role_site_type.site_type_id =dict.dict_id
+	</select>
+
+	<!-- 查询角色菜单资源列表 -->
+	<select id="queryRoleMenuResAll" resultMap="DtoResultMap">
+		SELECT
+		r.role_id,
+		r.role_name,
+		res.res_id,
+		res.res_code,
+		res.res_name,
+		res.res_type,
+		res.req_method,
+		res.res_url,
+		res.res_desc,
+		res.parent_res_id,
+		res.res_seq,
+		res.res_level
+		FROM
+		hs_auth_role r
+		LEFT JOIN hs_auth_role_resource ar ON r.role_id = ar.role_id
+		LEFT JOIN
+		hs_auth_resource AS res ON ar.res_id = res.res_id
+		WHERE res.rd_status
+		=1 and r.rd_status = 1
+	</select>
+
+	<!-- 查询角色资源列表 -->
+	<select id="queryRoleResAll" resultMap="DtoResultMap">
+	<![CDATA[
+		   SELECT 
+			r.role_id,
+			r.role_name,
+			res.res_id,
+			res.res_code,
+			res.res_name,
+			res.res_type,
+			res.req_method,
+			res.res_url,
+			res.res_desc,
+			res.parent_res_id,
+			res.res_seq,
+			res.res_level
+		FROM
+			hs_auth_role r 
+		LEFT JOIN hs_auth_role_resource ar ON r.role_id = ar.role_id
+		LEFT JOIN hs_auth_resource AS res ON ar.res_id = res.res_id
+		WHERE res.rd_status =1 and r.rd_status = 1 and res.res_url <> '' and res.res_url is not null
+		]]>
+	</select>
+	
+	<select id="getAllRole" resultMap="baseResult">
+	 	SELECT role_id,role_name , remark  FROM hs_auth_role WHERE rd_status =1
+	</select>
+	
+	<!--获取最大顺序  -->
+	<select id="queryMaxOrder" resultType="java.lang.Long" >
+		select role_order from hs_auth_role order by role_order desc limit 1
+	</select>
+
+</mapper>

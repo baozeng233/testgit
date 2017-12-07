@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsAuthResourceDAO">
+	<resultMap id="DtoResultMap" type="com.zeus.baseddata.entity.user.AuthResourceDTO">
+		<id column="res_id" property="resId" />
+		<result column="res_name" property="resName"/>
+		<result column="res_code" property="resCode"/>
+		<result column="res_type" property="resType"/>
+		<result column="req_method" property="reqMethod"/>
+		<result column="res_url" property="resUrl"/>
+		<result column="res_desc" property="resDesc"/>
+		<result column="parent_res_id" property="parentResId"/>
+		<result column="res_seq" property="resSeq"/>
+		<result column="res_level" property="resLevel"/>
+		<result column="created_by" property="createdBy"/>
+		<result column="created_time" property="createdTime"/>
+		<result column="modified_by" property="modifiedBy"/>
+		<result column="modified_time" property="modifiedTime"/>
+		<result column="rd_status" property="rdStatus"/>
+		<result column="created_name" property="createdName"/>
+		<result column="modified_name" property="modifiedName"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="access_power" property="accessPower" />
+		<result column="grant_power" property="grantPower" />
+	</resultMap>
+<sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  
+  
+ 
+  <sql id="Base_Column_List" >
+    res.res_id, res.res_name, res.res_code, res.res_type, res.req_method, res.res_url, res.res_desc, res.parent_res_id, 
+    res.res_seq, res.res_level, res.created_by, res.created_time,  res.modified_by, 
+    res.modified_time, res.rd_status,c.user_name AS created_name,m.user_name AS modified_name,
+    menus.menu_name
+  </sql>
+
+	<!-- 资源信息删除（逻辑删除） -->
+	<update id="updateStatusByPrimaryKey" parameterType="java.lang.Long">
+		update
+		hs_auth_resource
+		set rd_status = 0
+		where res_id =
+		#{resId,jdbcType=BIGINT}
+	</update>
+
+	<!--资源角色关联表清除 -->
+	<delete id="deleteRelationWithRoleByPrimaryKey" parameterType="java.lang.Long">
+		delete from hs_auth_role_resource
+		where res_id=#{resId,jdbcType=BIGINT}
+	</delete>
+	
+	<!--关联条件查询  -->
+<select id="queryByParams" resultMap="DtoResultMap"  >
+    select
+    distinct
+    <include refid="Base_Column_List" />
+	FROM hs_auth_resource AS res
+	LEFT JOIN hs_auth_menus AS menus ON res.parent_res_id=menus.menu_id
+    LEFT JOIN hs_auth_user AS c ON res.created_by=c.user_id
+    LEFT JOIN hs_auth_user AS m ON res.modified_by=m.user_id
+    where res.rd_status=1
+    <if test="resName != null and resName != ''" >
+      AND res.res_name like "%${resName}%"
+    </if>
+    <if test="resType != null and resType != ''" >
+      AND res.res_type= #{resType}
+    </if>
+    <if test="reqMethod != null and reqMethod != ''" >
+      AND res.req_method=#{reqMethod}
+    </if>
+  </select>
+  
+  <!-- 查询所有 -->
+  <select id="selectList"  resultMap="DtoResultMap" >
+  	select res_id, parent_res_id,res_name
+  	from hs_auth_resource  where rd_status =1
+  </select>
+  
+  <!--获取最大顺序  -->
+  <select id="queryMaxOrder" resultType="java.lang.Long">
+  	select res_seq from hs_auth_resource order by res_seq desc limit 1
+  </select>
+  
+  <!-- 获取当前用户的资源权限 -->
+  <select id="queryResbyUser" resultMap="DtoResultMap"  parameterType="java.lang.Long" >
+     SELECT res.res_id, res.res_name, res.res_code, res.res_type, res.req_method, res.res_url, rr.access_power,rr.grant_power
+     FROM (SELECT * FROM hs_auth_user_role WHERE user_id =#{userId}) AS ur
+     LEFT JOIN  hs_auth_role  AS role
+     ON ur.role_id =role.role_id
+     LEFT JOIN hs_auth_role_resource AS  rr
+     ON rr.role_id=role.role_id
+     LEFT JOIN  (SELECT * FROM  hs_auth_resource WHERE rd_status=1)  AS res
+     ON res.res_id =rr.res_id
+  </select>
+ 
+  
+ 
+
+</mapper>

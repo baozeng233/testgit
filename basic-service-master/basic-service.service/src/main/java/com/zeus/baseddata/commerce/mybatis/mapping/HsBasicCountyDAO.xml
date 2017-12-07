@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicCountyDAO">
+
+<resultMap type="com.zeus.baseddata.entity.based.RegionResultDTO" id="RegionResultMap">
+	<result column="country_name"  property="countryName" />
+	<result column="province_name"  property="provinceName" />
+	<result column="city_name"  property="cityName" />
+	<result column="country_id"  property="countryId" />
+	<result column="province_id"  property="provinceId" />
+	<result column="city_id"  property="cityId" />
+</resultMap>
+
+<resultMap id="ResultMap" type="com.zeus.baseddata.entity.based.CountyDTO" >
+    <id column="county_id" property="countyId" jdbcType="BIGINT" />
+    <result column="county_code" property="countyCode" jdbcType="VARCHAR" />
+    <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+    <result column="county_pinyin" property="countyPinyin" jdbcType="VARCHAR" />
+    <result column="county_order" property="countyOrder" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="BIGINT" />
+    <result column="postcode" property="postcode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="overall_flag" property="overallFlag" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="country_name" property="countryName"/>
+    <result column="province_name" property="provinceName"/>
+    <result column="city_name" property="cityName"/>
+  </resultMap>
+
+	<!-- 逻辑删除区县信息 -->
+	<update id="updateRdStatusByCountyId" parameterType="java.lang.Long">
+		update hs_basic_county set rd_status =0 where county_id=#{id}
+	</update>
+	
+	<!-- 获取最大顺序 -->
+<select id="queryMaxOrder"  resultType="java.lang.Long" >
+	select county_order from hs_basic_county where rd_status = 1 order by county_order desc limit 1
+</select>
+
+<!-- 查询所属国省市 -->
+<select id="selectRegionInfo" parameterType="java.lang.Long" resultMap="RegionResultMap" >
+	select
+	country.country_id,country.country_name,province.province_id,province.province_name,city.city_id,city.city_name
+	from  hs_basic_county AS county
+	LEFT JOIN hs_basic_city AS city
+	ON  county.city_id=city.city_id
+	LEFT JOIN hs_basic_province AS province
+	ON province.province_id = city.province_id
+	LEFT JOIN  hs_basic_country AS country
+	ON country.country_id=province.country_id
+	where county.county_id=#{countyId}
+</select>
+
+<!-- 关联查询明细 -->
+<select id="queryInfo"  parameterType="java.lang.Long" resultMap="ResultMap" >
+  select county.*, country.country_name ,province.province_name,city.city_name
+  from hs_basic_county AS county
+  LEFT JOIN hs_basic_city AS city
+  ON county.city_id =city.city_id
+  LEFT JOIN  hs_basic_province AS province
+  ON province.province_id=city.province_id
+  LEFT JOIN hs_basic_country country
+  ON province.country_id =country.country_id
+  where county.county_id=#{countyId}
+</select>
+
+</mapper>

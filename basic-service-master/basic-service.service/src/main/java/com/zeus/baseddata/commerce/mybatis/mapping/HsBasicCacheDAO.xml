@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeus.baseddata.commerce.mybatis.dao.HsBasicCacheDAO" >
+  <resultMap id="DtoResultMap" type="com.zeus.baseddata.entity.based.CacheDTO" >
+    <id column="cache_id" property="cacheId" jdbcType="BIGINT" />
+    <result column="cache_code" property="cacheCode" jdbcType="VARCHAR" />
+    <result column="cache_name" property="cacheName" jdbcType="VARCHAR" />
+    <result column="is_enable" property="isEnable" jdbcType="INTEGER" />
+    <result column="data_url" property="dataUrl" jdbcType="VARCHAR" />
+    <result column="field_code" property="fieldCode" jdbcType="VARCHAR" />
+    <result column="req_method" property="reqMethod" jdbcType="INTEGER" />
+    <result column="created_by" property="createdBy" jdbcType="BIGINT" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_by" property="modifiedBy" jdbcType="BIGINT" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+    <result column="reflush_by" property="reflushBy" jdbcType="BIGINT" />
+    <result column="reflush_time" property="reflushTime" jdbcType="TIMESTAMP" />
+    <result column="rd_status" property="rdStatus" jdbcType="INTEGER" />
+    <result column="created_name" property="createdName"  />
+    <result column="modified_name" property="modifiedName" />
+  </resultMap>
+  
+  <select id="queryByParam" parameterType="com.zeus.baseddata.mybatis.model.based.HsBasicCache" resultMap="DtoResultMap" >
+	  	SELECT ca.*,c.user_name AS created_name, m.user_name AS modified_name
+	  	FROM hs_basic_cache AS ca
+	  	LEFT JOIN hs_auth_user AS c
+		ON ca.created_by=c.user_id
+		LEFT JOIN hs_auth_user AS m
+		ON ca.modified_by=m.user_id
+		WHERE ca.rd_status=1
+	<if test="cacheCode != null and cacheCode != '' ">
+		AND ca.cache_code=#{cacheCode}
+	</if>
+	<if test="cacheName != null and cacheName != '' ">
+		AND ca.cache_name=#{cacheName}
+	</if>
+	<if test="isEnable != null and isEnable != '' ">
+		AND ca.is_enable=#{isEnable}
+	</if>
+  </select>
+</mapper>
