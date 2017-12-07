@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="basic-service.boot" />
+        <module name="basic-service.intf" />
+        <module name="basic-service.service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="basic-service" target="1.5" />
+      <module name="basic-service.boot" target="1.5" />
+      <module name="basic-service.intf" target="1.5" />
+      <module name="basic-service.service" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
